@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="16" height="16" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="1">
+ <tileset firstgid="1" name="FarmTiles" tilewidth="130" tileheight="107" tilecount="63" columns="0">
+  <grid orientation="orthogonal" width="1" height="1"/>
+  <tile id="0">
+   <image width="40" height="47" source="CozyFarmProject/FallFarmTiles/farmcrops2.png"/>
+  </tile>
+  <tile id="1">
+   <image width="33" height="46" source="CozyFarmProject/FallFarmTiles/farmcrops1.png"/>
+  </tile>
+  <tile id="2">
+   <image width="43" height="43" source="CozyFarmProject/FallFarmTiles/farmcrops.png"/>
+  </tile>
+  <tile id="3">
+   <image width="16" height="21" source="CozyFarmProject/FallFarmTiles/treasureboxclose.png"/>
+  </tile>
+  <tile id="4">
+   <image width="16" height="21" source="CozyFarmProject/FallFarmTiles/treasureboxslightlyopen.png"/>
+  </tile>
+  <tile id="5">
+   <image width="19" height="21" source="CozyFarmProject/FallFarmTiles/treasureboxopen.png"/>
+  </tile>
+  <tile id="6">
+   <image width="31" height="48" source="CozyFarmProject/FallFarmTiles/blackstreetlight1.png"/>
+  </tile>
+  <tile id="7">
+   <image width="31" height="48" source="CozyFarmProject/FallFarmTiles/blackstreetlight.png"/>
+  </tile>
+  <tile id="8">
+   <image width="15" height="48" source="CozyFarmProject/FallFarmTiles/greenstreetlight1.png"/>
+  </tile>
+  <tile id="9">
+   <image width="15" height="49" source="CozyFarmProject/FallFarmTiles/greenstreetlight.png"/>
+  </tile>
+  <tile id="10">
+   <image width="15" height="33" source="CozyFarmProject/FallFarmTiles/farmscarecrow.png"/>
+  </tile>
+  <tile id="11">
+   <image width="31" height="33" source="CozyFarmProject/FallFarmTiles/farmstone1.png"/>
+  </tile>
+  <tile id="12">
+   <image width="48" height="48" source="CozyFarmProject/FallFarmTiles/farmstone.png"/>
+  </tile>
+  <tile id="13">
+   <image width="53" height="48" source="CozyFarmProject/FallFarmTiles/farmstonegate1.png"/>
+  </tile>
+  <tile id="14">
+   <image width="55" height="50" source="CozyFarmProject/FallFarmTiles/farmstonegate.png"/>
+  </tile>
+  <tile id="15">
+   <image width="16" height="28" source="CozyFarmProject/FallFarmTiles/farmjol1.png"/>
+  </tile>
+  <tile id="16">
+   <image width="16" height="28" source="CozyFarmProject/FallFarmTiles/farmjol.png"/>
+  </tile>
+  <tile id="17">
+   <image width="9" height="20" source="CozyFarmProject/FallFarmTiles/farmgate6.png"/>
+  </tile>
+  <tile id="18">
+   <image width="8" height="20" source="CozyFarmProject/FallFarmTiles/farmgate5.png"/>
+  </tile>
+  <tile id="19">
+   <image width="31" height="20" source="CozyFarmProject/FallFarmTiles/farmgate4.png"/>
+  </tile>
+  <tile id="20">
+   <image width="13" height="33" source="CozyFarmProject/FallFarmTiles/farmgate2.png"/>
+  </tile>
+  <tile id="21">
+   <image width="28" height="18" source="CozyFarmProject/FallFarmTiles/farmgate1.png"/>
+  </tile>
+  <tile id="22">
+   <image width="43" height="47" source="CozyFarmProject/FallFarmTiles/farmgate.png"/>
+  </tile>
+  <tile id="23">
+   <image width="17" height="16" source="CozyFarmProject/FallFarmTiles/farmflowers5.png"/>
+  </tile>
+  <tile id="24">
+   <image width="17" height="16" source="CozyFarmProject/FallFarmTiles/farmflowers4.png"/>
+  </tile>
+  <tile id="25">
+   <image width="14" height="16" source="CozyFarmProject/FallFarmTiles/farmflowers2.png"/>
+  </tile>
+  <tile id="26">
+   <image width="14" height="16" source="CozyFarmProject/FallFarmTiles/farmflowers1.png"/>
+  </tile>
+  <tile id="27">
+   <image width="14" height="16" source="CozyFarmProject/FallFarmTiles/farmflowers.png"/>
+  </tile>
+  <tile id="28">
+   <image width="66" height="17" source="CozyFarmProject/FallFarmTiles/farmrocks.png"/>
+  </tile>
+  <tile id="29">
+   <image width="13" height="14" source="CozyFarmProject/FallFarmTiles/farmfruit9.png"/>
+  </tile>
+  <tile id="30">
+   <image width="13" height="14" source="CozyFarmProject/FallFarmTiles/farmfruit8.png"/>
+  </tile>
+  <tile id="31">
+   <image width="13" height="14" source="CozyFarmProject/FallFarmTiles/farmfruit7.png"/>
+  </tile>
+  <tile id="32">
+   <image width="13" height="14" source="CozyFarmProject/FallFarmTiles/farmfruit5.png"/>
+  </tile>
+  <tile id="33">
+   <image width="13" height="14" source="CozyFarmProject/FallFarmTiles/farmfruit4.png"/>
+  </tile>
+  <tile id="34">
+   <image width="13" height="14" source="CozyFarmProject/FallFarmTiles/farmfruit1.png"/>
+  </tile>
+  <tile id="35">
+   <image width="15" height="19" source="CozyFarmProject/FallFarmTiles/farmfruit.png"/>
+  </tile>
+  <tile id="36">
+   <image width="33" height="33" source="CozyFarmProject/FallFarmTiles/farmtrees5.png"/>
+  </tile>
+  <tile id="37">
+   <image width="33" height="33" source="CozyFarmProject/FallFarmTiles/farmtrees4.png"/>
+  </tile>
+  <tile id="38">
+   <image width="33" height="33" source="CozyFarmProject/FallFarmTiles/farmtrees3.png"/>
+  </tile>
+  <tile id="39">
+   <image width="33" height="33" source="CozyFarmProject/FallFarmTiles/farmtrees2.png"/>
+  </tile>
+  <tile id="40">
+   <image width="33" height="33" source="CozyFarmProject/FallFarmTiles/farmtrees1.png"/>
+  </tile>
+  <tile id="41">
+   <image width="33" height="33" source="CozyFarmProject/FallFarmTiles/farmtrees.png"/>
+  </tile>
+  <tile id="42">
+   <image width="65" height="16" source="CozyFarmProject/FallFarmTiles/grassfarm8.png"/>
+  </tile>
+  <tile id="43">
+   <image width="63" height="31" source="CozyFarmProject/FallFarmTiles/grassfarm7.png"/>
+  </tile>
+  <tile id="44">
+   <image width="47" height="48" source="CozyFarmProject/FallFarmTiles/grassfarm6.png"/>
+  </tile>
+  <tile id="45">
+   <image width="47" height="48" source="CozyFarmProject/FallFarmTiles/grassfarm5.png"/>
+  </tile>
+  <tile id="46">
+   <image width="47" height="48" source="CozyFarmProject/FallFarmTiles/grassfarm4.png"/>
+  </tile>
+  <tile id="47">
+   <image width="47" height="48" source="CozyFarmProject/FallFarmTiles/grassfarm3.png"/>
+  </tile>
+  <tile id="48">
+   <image width="47" height="48" source="CozyFarmProject/FallFarmTiles/grassfarm2.png"/>
+  </tile>
+  <tile id="49">
+   <image width="48" height="48" source="CozyFarmProject/FallFarmTiles/grassfarm1.png"/>
+  </tile>
+  <tile id="50">
+   <image width="48" height="48" source="CozyFarmProject/FallFarmTiles/grassfarm.png"/>
+  </tile>
+  <tile id="51">
+   <image width="32" height="32" source="CozyFarmProject/FallFarmTiles/dirt.png"/>
+  </tile>
+  <tile id="52">
+   <image width="96" height="77" source="CozyFarmProject/FallFarmTiles/fallfarmhouse.png"/>
+  </tile>
+  <tile id="53">
+   <image width="32" height="32" source="CozyFarmProject/FallFarmTiles/grass.png"/>
+  </tile>
+  <tile id="54">
+   <image width="32" height="32" source="CozyFarmProject/FallFarmTiles/moregrass.png"/>
+  </tile>
+  <tile id="55">
+   <image width="32" height="32" source="CozyFarmProject/FallFarmTiles/moredirt.png"/>
+  </tile>
+  <tile id="56">
+   <image width="32" height="32" source="CozyFarmProject/FallFarmTiles/grass1.png"/>
+  </tile>
+  <tile id="57">
+   <image width="93" height="75" source="CozyFarmProject/FallFarmTiles/market.png"/>
+  </tile>
+  <tile id="58">
+   <image width="74" height="77" source="CozyFarmProject/FallFarmTiles/npcHome.png"/>
+  </tile>
+  <tile id="59">
+   <image width="130" height="107" source="CozyFarmProject/FallFarmTiles/buildings.png"/>
+  </tile>
+  <tile id="60">
+   <image width="70" height="75" source="CozyFarmProject/FallFarmTiles/npchome1.png"/>
+  </tile>
+  <tile id="61">
+   <image width="92" height="105" source="CozyFarmProject/FallFarmTiles/windmill.png"/>
+  </tile>
+  <tile id="62">
+   <image width="42" height="43" source="CozyFarmProject/FallFarmTiles/waterhole1.png"/>
+  </tile>
+ </tileset>
+ <layer id="1" name="ground" width="16" height="16" opacity="0.65">
+  <data encoding="csv">
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
+55,45,45,55,55,55,55,55,55,55,55,55,55,55,55,55,
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,
+55,55,55,55,55,55,55,55,55,55,55,55,55,55,55,55
+</data>
+ </layer>
+ <layer id="2" name="pavement" width="16" height="16" opacity="0.99">
+  <data encoding="csv">
+50,50,50,50,50,50,50,50,50,50,50,50,56,56,56,56,
+45,45,45,45,45,45,45,50,46,46,50,50,56,56,56,56,
+45,45,45,45,45,45,45,50,46,46,0,0,56,56,56,56,
+12,12,12,45,45,45,45,50,46,46,0,0,56,56,56,56,
+45,45,45,45,45,45,45,50,46,46,50,50,56,56,56,56,
+56,56,56,56,56,56,56,56,46,46,0,50,50,50,50,50,
+56,56,56,56,56,56,56,56,46,46,46,46,46,46,46,50,
+45,45,56,56,56,56,56,56,46,46,12,12,12,12,12,12,
+45,45,52,56,56,56,56,56,46,46,12,12,12,12,12,12,
+45,45,50,50,50,50,50,50,46,46,12,12,12,12,12,12,
+22,45,11,50,50,50,50,0,46,46,12,12,12,12,12,12,
+50,50,50,46,46,46,46,46,46,46,46,46,46,46,46,46,
+50,50,50,46,46,46,46,46,46,46,46,46,46,46,46,46,
+56,56,12,12,12,12,12,12,46,46,50,50,46,46,46,46,
+12,12,56,50,50,50,50,50,46,46,50,50,50,50,50,50,
+56,56,56,50,50,50,50,50,46,46,0,50,50,50,50,50
+</data>
+ </layer>
+ <layer id="3" name="buildings(exceptplayerhouse)" width="16" height="16">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,7,0,24,25,59,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,24,0,0,0,0,
+21,0,0,0,0,0,0,0,0,0,12,12,0,0,0,0,
+0,0,0,12,0,0,0,0,0,0,12,12,56,56,0,0,
+21,0,0,12,0,0,0,0,0,0,25,27,28,24,28,25,
+0,0,0,0,22,0,0,22,0,0,24,0,0,27,0,25,
+0,0,0,0,0,0,0,0,0,0,0,0,60,0,0,0,
+56,56,0,62,0,0,0,0,0,0,12,0,0,0,0,0,
+52,52,0,0,0,0,0,22,0,0,12,0,0,0,0,0,
+52,52,52,0,0,0,0,0,0,0,12,0,0,0,0,0,
+52,52,52,0,0,0,0,8,0,0,12,0,0,58,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+61,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,29,0,29,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,50,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="4" name="playerhouselayer" width="16" height="16">
+  <data encoding="csv">
+53,22,22,22,22,22,22,18,0,0,0,0,0,0,0,0,
+21,0,0,0,0,43,0,21,0,0,0,0,0,0,0,0,
+0,0,0,11,0,43,0,21,0,0,0,0,0,0,0,0,
+21,0,0,0,0,43,0,21,0,0,0,0,0,0,0,0,
+22,20,0,0,0,43,0,21,0,0,0,0,0,0,0,0,
+21,0,0,0,0,0,11,0,0,0,0,0,11,0,0,0,
+21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+21,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,
+21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+21,0,0,22,0,22,22,0,0,0,0,0,0,0,0,0,
+0,0,0,21,0,0,0,0,0,0,0,0,0,0,0,0,
+22,22,22,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="5" name="extras" width="16" height="16">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,16,0,0,0,0,0,
+17,0,0,0,0,2,2,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,2,2,0,0,0,0,0,43,0,43,0,
+0,0,0,0,0,2,2,0,37,0,0,0,43,0,43,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,43,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,43,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+21,0,0,0,0,0,0,0,0,0,41,0,0,0,0,0,
+0,0,0,37,38,37,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,37,0,0,0,0,0,
+0,0,0,0,0,0,0,40,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="6" name="extras2" width="16" height="16">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,1,2,3,2,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>
