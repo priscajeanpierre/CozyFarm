@@ -5,9 +5,50 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/audio"
 	"github.com/hajimehoshi/ebiten/v2/audio/wav"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
+	"log"
+	"math"
 	"os"
 )
+
+type Crop struct {
+	X, Y  int
+	Grown bool
+}
+
+func initializeCrops() {
+	// crop initialization
+	crops = append(crops, &Crop{X: 100, Y: 200, Grown: true})
+	crops = append(crops, &Crop{X: 100, Y: 220, Grown: true})
+	crops = append(crops, &Crop{X: 100, Y: 240, Grown: true})
+	crops = append(crops, &Crop{X: 80, Y: 200, Grown: true})
+	crops = append(crops, &Crop{X: 80, Y: 220, Grown: true})
+	crops = append(crops, &Crop{X: 80, Y: 240, Grown: true})
+	crops = append(crops, &Crop{X: 60, Y: 200, Grown: true})
+	crops = append(crops, &Crop{X: 60, Y: 220, Grown: true})
+	crops = append(crops, &Crop{X: 60, Y: 240, Grown: true})
+	crops = append(crops, &Crop{X: 120, Y: 200, Grown: false})
+	crops = append(crops, &Crop{X: 120, Y: 220, Grown: false})
+	crops = append(crops, &Crop{X: 120, Y: 240, Grown: false})
+
+}
+
+var crops []*Crop
+var (
+	spriteCropGrown     *ebiten.Image
+	spriteCropHarvested *ebiten.Image
+)
+
+func isPlayerNearCrop(playerX, playerY int, crop *Crop) bool {
+	const InteractionThreshold = 30
+
+	dx := playerX - crop.X
+	dy := playerY - crop.Y
+	distance := math.Sqrt(float64(dx*dx + dy*dy))
+
+	return distance <= InteractionThreshold
+}
 
 // HARVEST STUFF
 func playerIsTryingToInteract() bool {
@@ -17,118 +58,23 @@ func playerIsTryingToInteract() bool {
 	}
 	return ebiten.IsKeyPressed(ebiten.KeyE)
 }
-func (m *mapGame) getTileID(x, y int) int {
 
-	tileX := x / 32
-	tileY := y / 32
-
-	// Iterate through each layer to find the tile at player's position
-	for _, layer := range m.Level.Layers {
-
-		index := tileY*m.Level.Width + tileX
-
-		// Check if index is within the bounds of tile array
-		if index < 0 || index >= len(layer.Tiles) {
-			continue
-		}
-
-		tile := layer.Tiles[index]
-
-		if tile.ID != 0 {
-			return int(tile.ID)
-		}
-	}
-
-	return 0
-
+func getPlayerPosition() (int, int) {
+	return player.X, player.Y
 }
-func (m *mapGame) isTileInteractable(x, y int) bool {
-	tileID := m.getTileID(x, y)
-	fmt.Printf("Interacting with Tile ID: %d\n", tileID)
+func loadCropSprites() {
 
-	// list of interactable tile IDs
-	interactableTiles := map[int]bool{
-		43: true, //dirt holes
-		1:  true, //farmcrops
-		2:  true, //farmcrops
-		3:  true, //farmcrops
-
+	img, _, err := ebitenutil.NewImageFromFile("tomatoGrown.png")
+	if err != nil {
+		log.Fatal(err)
 	}
+	spriteCropGrown = img
 
-	// Check if tileID is in list of interactable tiles
-	_, isInteractable := interactableTiles[tileID]
-	return isInteractable
-}
-
-func (m *mapGame) handleTileInteraction(tileID, x, y int) {
-	switch tileID {
-	case 54:
-
-		m.harvestCropAt(x, y)
-	case 1:
-		m.harvestCropAt(x, y)
-	case 2:
-		m.harvestCropAt(x, y)
-	case 3:
-		m.harvestCropAt(x, y)
+	img, _, err = ebitenutil.NewImageFromFile("harvestedPlot.png")
+	if err != nil {
+		log.Fatal(err)
 	}
-}
-func (m *mapGame) getPlayerTilePosition() (int, int) {
-	tileX := player.X / 32
-	tileY := player.Y / 32
-	fmt.Printf("Player Tile Position: %d, %d\n", tileX, tileY)
-
-	return tileX, tileY
-}
-
-func (m *mapGame) harvestCropAt(x, y int) {
-	fmt.Printf("Harvesting at coordinates: %d, %d\n", x, y)
-	tileX := x / 32
-	tileY := y / 32
-
-	// Iterate through each layer to find and update the crop tile
-	for _, layer := range m.Level.Layers {
-		index := tileY*m.Level.Width + tileX
-
-		if index < 0 || index >= len(layer.Tiles) {
-			continue
-		}
-
-		tile := &layer.Tiles[index]
-
-		// Check if the tile is a crop and update it
-		if isCropTile(int((*tile).ID)) {
-			// Change the tile ID to represent the harvested state
-			(*tile).ID = 1 // or another ID representing the harvested state
-
-			// Update player inventory
-			m.playerInventory.CropsHarvested++
-
-			// play harvest sound effect
-			if m.harvestSoundPlayer != nil {
-				err := m.harvestSoundPlayer.Rewind()
-				if err != nil {
-					return
-				}
-				m.harvestSoundPlayer.Play()
-			}
-
-			break
-		}
-	}
-}
-
-func isCropTile(tileID int) bool {
-	// Define which tile IDs represent crops
-	cropTiles := map[int]bool{
-		43: true,
-		1:  true,
-		2:  true,
-		3:  true,
-	}
-
-	_, isCrop := cropTiles[tileID]
-	return isCrop
+	spriteCropHarvested = img
 }
 
 func loadSoundFile(context *audio.Context) *audio.Player {
@@ -147,4 +93,13 @@ func loadSoundFile(context *audio.Context) *audio.Player {
 	}
 	return soundPlayer
 
+}
+func (m *mapGame) harvestCropAt(x, y int) {
+	for _, crop := range crops {
+		if crop.X == x && crop.Y == y && crop.Grown {
+			crop.Grown = false
+			playerInventory.Crops++
+			break
+		}
+	}
 }

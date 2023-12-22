@@ -21,11 +21,6 @@ var currentState GameState = CharacterSelection
 var Game = mapGame{}
 var cozyMaps = []string{"CozyFarm.tmx", "CozyFarmInterior.tmx", "WinterFarm.tmx"}
 var currentDialogue string
-var clickedObject string
-
-// how to render dialouge or if the approach im doing is good
-// is playerInteracts function a good way to detect collisions for other entites
-// such as harvesting
 
 // transition from map 1 to 2
 const transitionAreaX = 10
@@ -39,13 +34,10 @@ const transitionArea1Y = 450
 const transitionArea1Width = 50
 const transitionArea1Height = 50
 
-const NPC1AreaX = 450
-const NPC1AreaY = 65
-const NPC1AreaWidth = 50
-const NPC1AreaHeight = 50
-
 const MaxGrowthStage = 5
 const SOUND_SAMPLE_RATE = 48000
+
+var playerInventory Inventory
 
 var player = Player{
 	X: 100,
@@ -56,7 +48,7 @@ var NPCs = map[string]NPC{
 	"NPC1": {
 		Name: "NPC1",
 		Dialogs: []string{
-			"Hello Farmer you need to feed your animals.",
+			"Hello Farmer you need to feed your animals!",
 		},
 		X: 450,
 		Y: 70,
@@ -64,7 +56,7 @@ var NPCs = map[string]NPC{
 	"NPC2": {
 		Name: "NPC2",
 		Dialogs: []string{
-			"Hi, Neighbor, make sure you dint forget to harvest your crops",
+			"Hi, Neighbor, make sure you dont forget to harvest your crops!",
 		},
 		X: 50,
 		Y: 450,
@@ -89,8 +81,8 @@ type Plant struct {
 	HarvestedOnce bool
 }
 type Inventory struct {
-	CropsHarvested int
-	Items          map[string]int
+	Crops int
+	Items map[string]int
 }
 type mapGame struct {
 	Level              *tiled.Map
@@ -147,25 +139,26 @@ type mapGame struct {
 	FrameCow1          int
 	FrameDelayCow1     int
 
-	playerSprite        []*ebiten.Image
-	npcOne              []*ebiten.Image
-	npcTwo              []*ebiten.Image
-	bunny               []*ebiten.Image
-	chicken             []*ebiten.Image
-	cow                 []*ebiten.Image
-	goat                []*ebiten.Image
-	piggy               []*ebiten.Image
-	turkey              []*ebiten.Image
-	cow1                []*ebiten.Image
-	tree                []*ebiten.Image
-	Plants              []Plant
-	displayDialogue     bool
-	dialogueText        string
-	audioContext        *audio.Context
-	counter             int
-	playerInventory     Inventory
-	font                font.Face
-	selectedRecipeIndex int
+	playerSprite    []*ebiten.Image
+	npcOne          []*ebiten.Image
+	npcTwo          []*ebiten.Image
+	bunny           []*ebiten.Image
+	chicken         []*ebiten.Image
+	cow             []*ebiten.Image
+	goat            []*ebiten.Image
+	piggy           []*ebiten.Image
+	turkey          []*ebiten.Image
+	cow1            []*ebiten.Image
+	tree            []*ebiten.Image
+	Plants          []Plant
+	displayDialogue bool
+	dialogueText    string
+	audioContext    *audio.Context
+	counter         int
+	playerInventory Inventory
+	font            font.Face
+	IsCrafting      bool
+	CraftingMessage string
 }
 
 func FallFarm() {
@@ -195,6 +188,10 @@ func FallFarm() {
 	piggyFrames := piggy()
 	turkeyFrames := turkey()
 	treeFrame := tree()
+	loadCropSprites()
+	initializeCrops()
+	initializeTrees()
+	loadTreeSprites()
 	soundContext := audio.NewContext(SOUND_SAMPLE_RATE)
 
 	Game := mapGame{
@@ -270,17 +267,14 @@ func FallFarm() {
 	if err := ebiten.RunGame(&Game); err != nil {
 		log.Fatal(err)
 	}
-	//if err != nil {
-	//	fmt.Println("Couldn't run game:", err)
-	//}
+
 	ebiten.SetWindowSize(maxWidth, maxHeight)
 	ebiten.SetWindowTitle("Cozy Farm <3")
 
 }
 
 func (m *mapGame) Update() error {
-	//fmt.Println("Update() function called")
-	//fmt.Println(currentState)
+
 	if currentState == CharacterSelection {
 
 		if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
@@ -320,24 +314,28 @@ func (m *mapGame) Update() error {
 			currentState = InteriorState
 
 		}
+		if playerIsTryingToInteract() {
+			playerX, playerY := getPlayerPosition()
+			for _, crop := range crops {
+				if isPlayerNearCrop(playerX, playerY, crop) && crop.Grown {
+					m.harvestCropAt(crop.X, crop.Y)
+
+					break
+				}
+			}
+		}
 
 		if playerIsTryingToInteract() {
-			fmt.Println("Interaction attempt detected")
-			tileX, tileY := m.getPlayerTilePosition()
-			if m.isTileInteractable(tileX, tileY) {
-				tileID := m.getTileID(tileX*32, tileY*32) // Convert back to pixel coordinates
-				m.handleTileInteraction(tileID, tileX*32, tileY*32)
+			npc := m.playerNearNPC()
+			if npc != nil {
+				fmt.Printf("Interacting with NPC at (%d, %d)\n", npc.X, npc.Y)
+				currentDialogue = displayNPCDialogue(*npc)
+				fmt.Println("Dialogue set to:", currentDialogue)
 			}
 		}
-
-		m.npcOne = npc2()
-		if playerInteractsWithNPCSs(player.X, player.Y) {
-			npc1 := NPC{
-				Dialogs: []string{"Hello, dont forget to feed the animals!"},
-			}
-			displayNPCDialogue(npc1)
+		if npc := m.playerNearNPC(); npc == nil {
+			currentDialogue = ""
 		}
-		//handleNPCInteraction(playerX, playerY)
 
 		m.FrameDelay += 47
 		if m.FrameDelay%37 == 0 {
@@ -441,21 +439,13 @@ func (m *mapGame) Update() error {
 		}
 
 		if inpututil.IsKeyJustPressed(ebiten.KeyC) {
-			selectedRecipe := m.getSelectedRecipe()
-			m.CraftItem(selectedRecipe)
-		}
+			recipeToCraft := recipes[0]
+			if playerInventory.CraftRecipe(recipeToCraft) {
+				m.IsCrafting = true
+				m.CraftingMessage = "Crafting " + recipeToCraft.Name + "..."
 
-		if inpututil.IsKeyJustPressed(ebiten.KeyArrowUp) {
-			m.selectedRecipeIndex--
-			if m.selectedRecipeIndex < 0 {
-				m.selectedRecipeIndex = len(recipes) - 1 // go to the end
-			}
-		}
-
-		if inpututil.IsKeyJustPressed(ebiten.KeyArrowDown) {
-			m.selectedRecipeIndex++
-			if m.selectedRecipeIndex >= len(recipes) {
-				m.selectedRecipeIndex = 0 //go to the start
+			} else {
+				fmt.Println("Not enough ingredients to craft the recipe")
 			}
 		}
 
@@ -503,13 +493,15 @@ func (m *mapGame) Update() error {
 
 	if currentState == WinterState {
 
-		//if ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
-		//	mouseX, mouseY := ebiten.CursorPosition()
-		//	clickedObject = m.getObjectAt(mouseX, mouseY)
-		//} else {
-		//	clickedObject = ""
-		//}
-		//
+		if playerIsTryingToInteract() {
+			playerX, playerY := getPlayerPosition()
+			for _, tree := range trees {
+				if isPlayerNearTree(playerX, playerY, tree) && tree.SnowCovered {
+					m.clearSnowAt(tree.X, tree.Y)
+					break
+				}
+			}
+		}
 	}
 
 	m.FrameDelay += 47
@@ -602,6 +594,7 @@ func (m *mapGame) Update() error {
 	if m.isMovingRight {
 		player.X += PlayerSpeed
 	}
+
 	return nil
 }
 
@@ -642,10 +635,6 @@ func (m *mapGame) Draw(screen *ebiten.Image) {
 	}
 
 	if currentState == MainGame {
-
-		if m.displayDialogue {
-			renderDialogue(screen)
-		}
 
 		for _, layer := range m.Level.Layers {
 
@@ -716,14 +705,24 @@ func (m *mapGame) Draw(screen *ebiten.Image) {
 		frameToDraw8 := m.turkey[m.FrameTURK]
 		screen.DrawImage(frameToDraw8, &drawOptions)
 
-		//text.Draw(screen, fmt.Sprintf("Crops harvested: %d", m.playerInventory.CropsHarvested),
-		//	m.font, 10, 20, color.White)
-		text.Draw(screen, fmt.Sprintf("Player Pos: %d, %d", player.X, player.Y), m.font, 10, 20, color.White)
-		tileX, tileY := m.getPlayerTilePosition()
-		tileID := m.getTileID(tileX*32, tileY*32)
-		text.Draw(screen, fmt.Sprintf("Tile ID: %d", tileID), m.font, 10, 40, color.White)
-		text.Draw(screen, fmt.Sprintf("Crops Harvested: %d", m.playerInventory.CropsHarvested), m.font, 10, 80, color.White)
+		for _, crop := range crops {
+			var sprite *ebiten.Image
+			if crop.Grown {
+				sprite = spriteCropGrown
+			} else {
+				sprite = spriteCropHarvested
+			}
 
+			opts := &ebiten.DrawImageOptions{}
+			opts.GeoM.Translate(float64(crop.X), float64(crop.Y))
+			screen.DrawImage(sprite, opts)
+		}
+
+		text.Draw(screen, fmt.Sprintf("Harvested Crops: %d", playerInventory.Crops), m.font, 10, 20, color.White)
+
+		if currentDialogue != "" {
+			m.renderDialogue(screen)
+		}
 	}
 	if currentState == InteriorState {
 		for _, layer := range m.Level1.Layers {
@@ -760,15 +759,13 @@ func (m *mapGame) Draw(screen *ebiten.Image) {
 		frameToDraw2 := m.npcTwo[m.FrameNPC2]
 		screen.DrawImage(frameToDraw2, &drawOptions)
 
-		startY := 20
-		for i, recipe := range recipes {
-			color := color.White
-			if i == m.selectedRecipeIndex {
-				color.RGBA() // Highlight selected recipe
-			}
-			text.Draw(screen, recipe.Name, m.font, 10, startY, color)
-			startY += 20 // Move to next line for next recipe
+		text.Draw(screen, "Press C to craft a recipe", m.font, 10, 20, color.White)
+		text.Draw(screen, fmt.Sprintf("Crops: %d", playerInventory.Crops), m.font, 10, 40, color.White)
+		if m.IsCrafting {
+			text.Draw(screen, m.CraftingMessage, m.font, 10, 40, color.White)
+
 		}
+
 	}
 
 	if currentState == WinterState {
@@ -842,6 +839,19 @@ func (m *mapGame) Draw(screen *ebiten.Image) {
 		frameToDraw8 := m.turkey[m.FrameTURK]
 		screen.DrawImage(frameToDraw8, &drawOptions)
 
+		for _, tree := range trees {
+			var sprite *ebiten.Image
+			if tree.SnowCovered {
+				sprite = spriteTreeSnowCovered
+			} else {
+				sprite = spriteTreeCleared
+			}
+
+			opts := &ebiten.DrawImageOptions{}
+			opts.GeoM.Translate(float64(tree.X), float64(tree.Y))
+			screen.DrawImage(sprite, opts)
+		}
+
 	}
 }
 
@@ -859,14 +869,6 @@ func playerInteractsWithTransitionPoint1(playerX, playerY int) bool {
 		playerX <= transitionArea1X+transitionArea1Width &&
 		playerY >= transitionArea1Y &&
 		playerY <= transitionArea1Y+transitionArea1Height
-}
-
-func playerInteractsWithNPCSs(playerX, playerY int) bool {
-
-	return playerX >= NPC1AreaX &&
-		playerX <= NPC1AreaX+NPC1AreaWidth &&
-		playerY >= NPC1AreaY &&
-		playerY <= NPC1AreaY+NPC1AreaHeight
 }
 
 func (m *mapGame) processPlayerInput() {
