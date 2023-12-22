@@ -192,6 +192,7 @@ func FallFarm() {
 	initializeCrops()
 	initializeTrees()
 	loadTreeSprites()
+	initializeEnemies()
 	soundContext := audio.NewContext(SOUND_SAMPLE_RATE)
 
 	Game := mapGame{
